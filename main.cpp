@@ -20,16 +20,18 @@ struct CommandLine {
     string file_path;            // -i option, input file
     string folder_input;         // -f option, input folder
     string output_path;          // -o option, output file
+    bool shiftZ;
     bool help;                   // -h option, help
 
 } globalArgs;
 
-static const char *optString = "i:o:f:h";
+static const char *optString = "i:o:f:hs";
 
 static const struct option longOpts[] = {
-    { "input_file", required_argument, NULL, 'i' },
+    { "input", required_argument, NULL, 'i' },
     { "folder", required_argument, NULL, 'f' },
     { "output", required_argument, NULL, 'o' },
+    { "shift", no_argument, NULL, 's'},
     { "help", no_argument, NULL, 'h' },
     {NULL, no_argument, NULL, 0}
 };
@@ -40,9 +42,10 @@ void printHelp(){
         "\n"
         "# /*** pcd2laz ***/\n"
         "# /*** Command line arguments ***/\n\n"
-        "# -i --input_file    : input path for single 'pcd' file to be converted\n"
+        "# -i --input         : input path for single 'pcd' file to be converted\n"
         "# -f --folder        : input folder with all 'pcd' files to be converted\n"
         "# -o --output        : output file path, with explicit format, e.g. file.laz\n"
+        "# -s --shift         : shift the Y and Z axes coordinates\n"
         "# -h --help          : print help\n"
     << endl;
 
@@ -54,6 +57,26 @@ string outputFormat(string file){
     return current_format;
 }
 
+double text2number(string number){
+
+    stringstream ss;
+    ss << number;
+
+    double num;
+    ss >> num;
+
+    return num;
+}
+
+double timeStamp(string fileName){
+    std::string nameOnly = fileName.substr(0, fileName.length()-4);
+
+    std::size_t found = nameOnly.find_last_of("/\\");
+    std::string numStr = nameOnly.substr(found+1);
+
+    return text2number(numStr);
+}
+
 int main (int argc, char** argv)
 {
 
@@ -61,6 +84,7 @@ int main (int argc, char** argv)
     globalArgs.folder_input = "";
     globalArgs.output_path = "pcd_merged.laz";
     globalArgs.help = false;
+    globalArgs.shiftZ = false;
 
     int opt = 0;
 	int longIndex = 0;
@@ -82,6 +106,10 @@ int main (int argc, char** argv)
 
             case 'h':
                 globalArgs.help = true;
+                break;
+
+            case 's':
+                globalArgs.shiftZ = true;
                 break;
 
             default:
@@ -115,7 +143,7 @@ int main (int argc, char** argv)
         format_macro = LAS_TOOLS_FORMAT_TXT;
     }
 
-    //globalArgs.folder_input = "/home/prolidar/Downloads/pcds";
+    //globalArgs.folder_input = "/home/tiago/Desktop/TRC/pcds";
     std::vector<std::string> cloud_files;
 
     if(globalArgs.file_path != ""){
@@ -139,8 +167,8 @@ int main (int argc, char** argv)
   laswriteopener.set_format(format_macro);
 
   LASheader lasheader;
-  lasheader.point_data_format = 0;
-  lasheader.point_data_record_length = 20;
+  lasheader.point_data_format = 1;
+  lasheader.point_data_record_length = 35;
 
   LASpoint laspoint;
   laspoint.init(&lasheader, lasheader.point_data_format, lasheader.point_data_record_length, &lasheader);
@@ -160,12 +188,19 @@ int main (int argc, char** argv)
       }
 
       cout << "## reading: " << cloud_files[i] << endl;
+      double tstp = timeStamp(cloud_files[i]);
       for (size_t j = 0; j < cloud->points.size (); ++j){
 
         //alterar parametros!!
         laspoint.set_x(cloud->points[j].x);
-        laspoint.set_y(cloud->points[j].z);
-        laspoint.set_z(cloud->points[j].y);
+        if(globalArgs.shiftZ){
+            laspoint.set_y(cloud->points[j].z);
+            laspoint.set_z(cloud->points[j].y);
+        }else{
+            laspoint.set_y(cloud->points[j].y);
+            laspoint.set_z(cloud->points[j].z);
+        }
+        laspoint.set_gps_time(tstp);
 
         laswriter->write_point(&laspoint);
         laswriter->update_inventory(&laspoint);

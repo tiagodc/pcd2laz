@@ -925,3 +925,73 @@
 	<vector>
 	<string>
 
+1498067939 source:/home/tiago/pcd2laz/main.cpp
+	<iostream>
+	<vector>
+	<string>
+	<sstream>
+	<getopt.h>
+	<pcl/io/pcd_io.h>
+	<pcl/point_types.h>
+	"boost/filesystem.hpp"
+	"lasreader.hpp"
+	"laswriter.hpp"
+	"lasfilter.hpp"
+	"simple_ls.hpp"
+
+1497036364 /home/tiago/pcd2laz/LASlib/inc/lasreader.hpp
+	"lasdefinitions.hpp"
+	"laswaveform13reader.hpp"
+
+1497036364 /home/tiago/pcd2laz/LASlib/inc/lasdefinitions.hpp
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<assert.h>
+	"mydefs.hpp"
+	"laszip.hpp"
+	"laspoint.hpp"
+
+1497036364 /home/tiago/pcd2laz/LASzip/src/mydefs.hpp
+
+1497036364 /home/tiago/pcd2laz/LASzip/src/laszip.hpp
+
+1497036364 /home/tiago/pcd2laz/LASzip/src/laspoint.hpp
+	"lasquantizer.hpp"
+	"lasattributer.hpp"
+
+1497036364 /home/tiago/pcd2laz/LASzip/src/lasquantizer.hpp
+	"mydefs.hpp"
+
+1497036364 /home/tiago/pcd2laz/LASzip/src/lasattributer.hpp
+	"mydefs.hpp"
+
+1497036364 /home/tiago/pcd2laz/LASlib/inc/laswaveform13reader.hpp
+	"lasdefinitions.hpp"
+
+1497036364 /home/tiago/pcd2laz/LASlib/inc/laswriter.hpp
+	"lasdefinitions.hpp"
+	"lasutility.hpp"
+	"laswaveform13writer.hpp"
+
+1497036364 /home/tiago/pcd2laz/LASlib/inc/lasutility.hpp
+	"lasdefinitions.hpp"
+
+1497036364 /home/tiago/pcd2laz/LASlib/inc/laswaveform13writer.hpp
+	"lasdefinitions.hpp"
+
+1497036364 /home/tiago/pcd2laz/LASlib/inc/lasfilter.hpp
+	"lasdefinitions.hpp"
+
+1497301114 /home/tiago/pcd2laz/simple_ls.hpp
+	<vector>
+	<string>
+
+1497468090 source:/home/tiago/pcd2laz/simple_ls.cpp
+	"boost/filesystem/operations.hpp"
+	"boost/filesystem/path.hpp"
+	"boost/progress.hpp"
+	<iostream>
+	<vector>
+	<string>
+
