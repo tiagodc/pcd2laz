@@ -143,7 +143,7 @@ int main (int argc, char** argv)
         format_macro = LAS_TOOLS_FORMAT_TXT;
     }
 
-    //globalArgs.folder_input = "/home/tiago/Desktop/TRC/pcds";
+    //globalArgs.folder_input = "/home/tiago/Desktop/pcl_temp";
     std::vector<std::string> cloud_files;
 
     if(globalArgs.file_path != ""){
@@ -169,6 +169,9 @@ int main (int argc, char** argv)
   LASheader lasheader;
   lasheader.point_data_format = 1;
   lasheader.point_data_record_length = 35;
+  lasheader.x_scale_factor = 0.0001;
+  lasheader.y_scale_factor = 0.0001;
+  lasheader.z_scale_factor = 0.0001;
 
   LASpoint laspoint;
   laspoint.init(&lasheader, lasheader.point_data_format, lasheader.point_data_record_length, &lasheader);
@@ -201,6 +204,8 @@ int main (int argc, char** argv)
             laspoint.set_z(cloud->points[j].z);
         }
         laspoint.set_gps_time(tstp);
+
+        //cout << cloud->points[j].x << " : " << cloud->points[j].y << " : " << cloud->points[j].z << endl;
 
         laswriter->write_point(&laspoint);
         laswriter->update_inventory(&laspoint);
