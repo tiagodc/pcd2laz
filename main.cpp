@@ -181,9 +181,9 @@ int main (int argc, char** argv)
   //cout << "## reading 'pcd' files"<< endl;
   for(unsigned i = 0; i < cloud_files.size(); ++i){
 
-      pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+      pcl::PointCloud<pcl::PointXYZI>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZI>);
 
-      if (pcl::io::loadPCDFile<pcl::PointXYZ> (cloud_files[i], *cloud) == -1) //* load the file
+      if (pcl::io::loadPCDFile<pcl::PointXYZI> (cloud_files[i], *cloud) == -1) //* load the file
       {
         //cout << "## could not read file: " << cloud_files[i] << endl;
         PCL_ERROR("");
@@ -204,6 +204,7 @@ int main (int argc, char** argv)
             laspoint.set_z(cloud->points[j].z);
         }
         laspoint.set_gps_time(tstp);
+        laspoint.set_intensity(cloud->points[j].intensity);
 
         //cout << cloud->points[j].x << " : " << cloud->points[j].y << " : " << cloud->points[j].z << endl;
 
